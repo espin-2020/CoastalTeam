@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tides on a randomly vegetated field &mdash; ESPIn2020 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API Reference" href="../../apiref/index.html" />
+    <link rel="prev" title="Example notebook" href="../examplenotebook.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> ESPIn2020
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../background/index.html">Background</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../example01.html">Example - 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examplenotebook.html">Example notebook</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tides on a randomly vegetated field</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#importing-and-installing">Importing and Installing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model-parameters">Model Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generating-a-random-field">Generating a random field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-the-landlab-grid">Defining the Landlab Grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instantiate-the-tidalflowcalculator-and-run-it">Instantiate the TidalFlowCalculator and run it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialize-the-particles-and-run-them">Initialize the particles and run them</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#make-visualizations">Make visualizations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-outpus-gifs-and-more">Other Outpus, Gifs and More</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../apiref/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ESPIn2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Tides on a randomly vegetated field</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/examples/RandomField2D/RandomField2D.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tides-on-a-randomly-vegetated-field">
+<h1>Tides on a randomly vegetated field<a class="headerlink" href="#tides-on-a-randomly-vegetated-field" title="Permalink to this headline">¶</a></h1>
+<p>In this notebook we will be running the
+<a class="reference external" href="https://landlab.github.io/">Landlab</a> tidal-flow-calculator over a
+randomly generated field of vegetation (simulated by 2 Mannings
+Roughness values) and looking at how passive particle transport is
+impacted by the spatial distribution of plants.</p>
+<div class="section" id="importing-and-installing">
+<h2>Importing and Installing<a class="headerlink" href="#importing-and-installing" title="Permalink to this headline">¶</a></h2>
+<p>First we will import some standard scientific Python libraries</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<p>Next we need to install some libraries (including Landlab) to properly
+accomplish this task.</p>
+<p>As of this writing (8/18/2020) the tidal-flow-calculator is not part of
+the core Landlab installation. As a consequence, we need to checkout the
+feature branch containing the tidal-flow-calculator component
+(<a class="reference external" href="https://github.com/landlab/landlab/tree/gt/tidal-flow-component">https://github.com/landlab/landlab/tree/gt/tidal-flow-component</a>). After
+checking out or cloning this branch locally, <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code>
+should be run to build a new landlab installation containing the
+tidal-flow-calculator.</p>
+<p>To build random fields of different characteristic length scales, we
+will use the geostatistical toolbox
+<a class="reference external" href="https://geostat-framework.github.io/">GSTools</a>. To install
+this package, the command <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">gstools</span></code> can be run from the
+command line. In this example we will be using a standard covariance
+model for random field generation.</p>
+<p>Lastly, to simulate passive particle transport we will use the
+Lagrangian-based transport model
+<a class="reference external" href="https://passah2o.github.io/dorado/">dorado</a>. To install dorado we
+can type <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pydorado</span></code> from the command line.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">landlab.components</span> <span class="kn">import</span> <span class="n">TidalFlowCalculator</span>
+<span class="kn">from</span> <span class="nn">landlab</span> <span class="kn">import</span> <span class="n">RasterModelGrid</span>
+<span class="kn">from</span> <span class="nn">landlab.grid.mappers</span> <span class="kn">import</span> <span class="n">map_max_of_link_nodes_to_link</span>
+<span class="kn">from</span> <span class="nn">dorado.routines</span> <span class="kn">import</span> <span class="n">plot_state</span>
+<span class="kn">import</span> <span class="nn">gstools</span> <span class="k">as</span> <span class="nn">gs</span>
+</pre></div>
+</div>
+<p>Lastly there are some custom scripts containing functions we want to use
+for this example. These scripts are available in the same directory as
+this notebook, and so our imports will be happening locally.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">map_fun</span> <span class="kn">import</span> <span class="n">gridded_vars</span>
+<span class="kn">from</span> <span class="nn">plot_fun</span> <span class="kn">import</span> <span class="n">group_plot</span>
+<span class="kn">from</span> <span class="nn">plot_fun</span> <span class="kn">import</span> <span class="n">plot_depth</span>
+<span class="kn">from</span> <span class="nn">particletransport</span> <span class="kn">import</span> <span class="n">init_particles</span>
+<span class="kn">from</span> <span class="nn">particletransport</span> <span class="kn">import</span> <span class="n">tidal_particles</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="model-parameters">
+<h2>Model Parameters<a class="headerlink" href="#model-parameters" title="Permalink to this headline">¶</a></h2>
+<p>We are going to create model parameters that define the tidal scenario
+for the tidal-flow-calculator as well as the random field properties.</p>
+<p>First we will define the size of the domain (which is going to be a
+square) as well as the grid spacing, mean water depth, and properties
+associated with the tide. Two roughness values are going to be
+specified, a low and high roughness to represent low and high vegetation
+density.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nrows</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">ncols</span> <span class="o">=</span> <span class="n">nrows</span>
+<span class="n">grid_spacing</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># m</span>
+<span class="n">mean_depth</span> <span class="o">=</span> <span class="mf">1.5</span>  <span class="c1"># m</span>
+<span class="n">tidal_range</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># m</span>
+<span class="n">roughness_low</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># s/m^1/3, i.e., Manning&#39;s n</span>
+<span class="n">roughness_high</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># s/m^1/3, i.e., Manning&#39;s n</span>
+<span class="n">tide_period</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span>  <span class="c1"># tidal period in seconds</span>
+<span class="n">n_tide_periods</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># number of tidal periods to move particles around for</span>
+<span class="n">Np_tracer</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># number of passive particles to use</span>
+</pre></div>
+</div>
+<p>We also need to define properties of the random field. The two values of
+importance here are the <code class="docutils literal notranslate"><span class="pre">seed</span></code> which defines the random seed that is
+used (can be nice for reproducability) and the value <code class="docutils literal notranslate"><span class="pre">len_scale</span></code> which
+specifies the length scale of the features. <code class="docutils literal notranslate"><span class="pre">len_scale</span></code> is an integer
+for an isotropic field, but can be a list (e.g. <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">10]</span></code>) to create
+an anisotropic field.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># defines the random seed</span>
+<span class="n">len_scale</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># length scale - integer = isotropic; list [1, 5] = anisotropic</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="generating-a-random-field">
+<h2>Generating a random field<a class="headerlink" href="#generating-a-random-field" title="Permalink to this headline">¶</a></h2>
+<p>Now we will be generating a random field based on the <code class="docutils literal notranslate"><span class="pre">seed</span></code> and
+<code class="docutils literal notranslate"><span class="pre">len_scale</span></code> parameters defined above.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrows</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">len_scale</span><span class="o">=</span><span class="n">len_scale</span><span class="p">)</span>
+<span class="n">srf</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">SRF</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+<span class="n">srf</span><span class="o">.</span><span class="n">structured</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+<span class="n">gs</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">binary</span><span class="p">(</span><span class="n">srf</span><span class="p">)</span>
+<span class="c1"># get array info from srf object</span>
+<span class="n">srf_array</span> <span class="o">=</span> <span class="n">srf</span><span class="o">.</span><span class="n">field</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s visualize this random field</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">srf_array</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Random Field&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/output_14_0.png" src="../../_images/output_14_0.png" />
+</div>
+<div class="section" id="defining-the-landlab-grid">
+<h2>Defining the Landlab Grid<a class="headerlink" href="#defining-the-landlab-grid" title="Permalink to this headline">¶</a></h2>
+<p>Next we are going to be defining the Landlab grid object and its
+associated parameters. This is where we will be passing in the roughness
+values as dictated by the random field. In areas where the random field
+values exceed 0, the roughness will be high, and in areas where the
+random field values are negative the roughness will be low.</p>
+<p><em>Note:</em> We are defining a domain in which the top and bottom boundaries
+are open and the left and right boundaries are closed. You can modify
+this by changing the True/False values!</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create and set up the grid</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">RasterModelGrid</span><span class="p">((</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">),</span> <span class="n">xy_spacing</span><span class="o">=</span><span class="n">grid_spacing</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_zeros</span><span class="p">(</span><span class="s1">&#39;topographic__elevation&#39;</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">set_closed_boundaries_at_grid_edges</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># set up roughness field (calculate on nodes, then map to links)</span>
+<span class="n">roughness_at_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">roughness_at_nodes</span><span class="p">[</span><span class="n">srf_array</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">roughness_high</span>  <span class="c1"># high roughness</span>
+<span class="n">roughness_at_nodes</span><span class="p">[</span><span class="n">srf_array</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">roughness_low</span>  <span class="c1"># low roughness</span>
+<span class="n">roughness</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_zeros</span><span class="p">(</span><span class="s1">&#39;roughness&#39;</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="s1">&#39;link&#39;</span><span class="p">)</span>
+<span class="n">map_max_of_link_nodes_to_link</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">roughness_at_nodes</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">roughness</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">,</span>  <span class="mf">0.01</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="instantiate-the-tidalflowcalculator-and-run-it">
+<h2>Instantiate the TidalFlowCalculator and run it<a class="headerlink" href="#instantiate-the-tidalflowcalculator-and-run-it" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># instantiate the TidalFlowCalculator</span>
+<span class="n">tfc</span> <span class="o">=</span> <span class="n">TidalFlowCalculator</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">tidal_range</span><span class="o">=</span><span class="n">tidal_range</span><span class="p">,</span>
+                          <span class="n">tidal_period</span><span class="o">=</span><span class="n">tide_period</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="s1">&#39;roughness&#39;</span><span class="p">)</span>
+
+<span class="c1"># run it</span>
+<span class="n">tfc</span><span class="o">.</span><span class="n">run_one_step</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initialize-the-particles-and-run-them">
+<h2>Initialize the particles and run them<a class="headerlink" href="#initialize-the-particles-and-run-them" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get gridded values</span>
+<span class="n">gvals</span> <span class="o">=</span> <span class="n">gridded_vars</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+<span class="c1"># initialize the particle parameters</span>
+<span class="c1"># particles will be placed in center of domain</span>
+<span class="n">center_region</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">nrows</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">10</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">nrows</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">10</span><span class="p">)))</span>
+<span class="n">seed_xloc</span> <span class="o">=</span> <span class="n">center_region</span>
+<span class="n">seed_yloc</span> <span class="o">=</span> <span class="n">center_region</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">init_particles</span><span class="p">(</span><span class="n">seed_xloc</span><span class="p">,</span> <span class="n">seed_yloc</span><span class="p">,</span> <span class="n">Np_tracer</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="p">,</span> <span class="n">gvals</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="c1"># move the particles with the tides</span>
+<span class="n">walk_data</span> <span class="o">=</span> <span class="n">tidal_particles</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">tide_period</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_tide_periods</span><span class="p">,</span>
+                            <span class="n">plot_grid</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">roughness_at_nodes</span><span class="p">,</span>
+                                                           <span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="make-visualizations">
+<h2>Make visualizations<a class="headerlink" href="#make-visualizations" title="Permalink to this headline">¶</a></h2>
+<p>First we will visualize the velocity components of the ebb and flood
+tides. Then we will plot the particle locations at beginning and end of
+the simulation.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot velocity information</span>
+<span class="n">group_plot</span><span class="p">(</span><span class="n">gvals</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/output_23_0.png" src="../../_images/output_23_0.png" />
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot particle locations on the roughness field</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="c1"># first plot initial locations as blue dots</span>
+<span class="n">plot_state</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">roughness_at_nodes</span><span class="p">,</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)),</span>
+           <span class="n">walk_data</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="c1"># then plot final locations as red dots</span>
+<span class="n">plot_state</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">roughness_at_nodes</span><span class="p">,</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">)),</span>
+           <span class="n">walk_data</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">target_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="c1"># make the colorbar - yellow for high roughness, purple for low</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="c1"># tighten layout</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># show it</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/output_24_0.png" src="../../_images/output_24_0.png" />
+</div>
+<div class="section" id="other-outpus-gifs-and-more">
+<h2>Other Outpus, Gifs and More<a class="headerlink" href="#other-outpus-gifs-and-more" title="Permalink to this headline">¶</a></h2>
+<p>In this example we only ran the module for 10 tidal cycles. If instead
+we ran it for 50 tidal cycles and captured the particle position after
+each ebb/flood tide, we could create the following video:</p>
+<div class="figure align-center" id="id1">
+<img alt="50_Tidal_Cycles_gif" src="../../_images/demo_len_scale_10.gif" />
+<p class="caption"><span class="caption-text">50_Tidal_Cycles_gif</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+<p>We can also examine cases where the length scale of the features in the
+random field is changed, if we reduce the feature size then the
+particles are impeded less often and can travel further. Let’s take a
+look at what happens when the feature length scale is reduced from
+<code class="docutils literal notranslate"><span class="pre">len_scale=10</span></code> to <code class="docutils literal notranslate"><span class="pre">len_scale=5</span></code>:</p>
+<div class="figure align-center" id="id2">
+<img alt="len_scale_05_gif" src="../../_images/demo_len_scale_05.gif" />
+<p class="caption"><span class="caption-text">len_scale_05_gif</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>Now we can see that some particles make it to the edge of the domain,
+where we might say they ‘leave’ the area of study. This is a quick and
+dirty demonstration of how the spatial locations and spread of
+vegetation impacts the transport of nutrients and materials under the
+imposition of tidal flows.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../apiref/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../examplenotebook.html" class="btn btn-neutral float-left" title="Example notebook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, CoastalTeam
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

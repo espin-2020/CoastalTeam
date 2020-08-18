@@ -11,3 +11,4 @@ Examples using the tidal flood component.
 
    example01
    examplenotebook
+   RandomField2D/RandomField2D
