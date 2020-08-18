@@ -121,7 +121,7 @@ tfc = TidalFlowCalculator(
 tau_cr = 0.2 #Critical stress for unvegetated areas
 tau_crv = 0.5  #Critical stress for vegetated areas
 tcrgradeint = 0.2; # linear increase in tcr below MLW [pa/m]
-mud_erodability = 10^-5*24*3600;  # mud erodability kg/m2/day!!!
+mud_erodability = (10**-5)*24*3600;  # mud erodability kg/m2/day!!!
 
 #adding in new grids
 rate = tfc.calc_tidal_inundation_rate()
@@ -161,9 +161,13 @@ fupeak = np.pi/2
 #total sed erosion for loop
 ntdcy = 10 #number of tidal cycles
 E = grid.add_zeros('Erosion',at = 'link')
+print(mud_erodability)
+print(" ")
 for i in range(ntdcy):
     utide = grid.at_link['flood_tide_flow__velocity']*fupeak*np.sin(i/ntdcy * np.pi/2) #intra-tidal velocity
-    tauc = 1025*9.81*grid.at_link['roughness']^2 * utide^2 * tfc._water_depth_at_links ^ (-1/2)
-    E += 1/(ntdcy+1)*mud_erodability*(np.sqrt(1+(tauc/taucr)^2)-1)
-    
-print(E)
+    tauc = 1025*9.81*roughness**2 * utide**2 * tfc._water_depth_at_links**(-1/2)
+    E += 1/(ntdcy+1)*mud_erodability*(np.sqrt(1+(tauc/taucr)**2)-1)
+    print(max(E))
+
+print(grid.at_link.keys())    
+#print(np.maximum(E))
