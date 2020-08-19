@@ -35,7 +35,9 @@
 
     
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tides on a simple 2D field" href="../HomogeneousField2D/HomogeneousField2D.html" />
+    <link rel="prev" title="Examples" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,9 +86,40 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../background/index.html">Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sediment Erosion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#importing-and-installing">Importing and Installing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-parameters">Set parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#read-the-dem-to-create-a-grid-and-topography-field">Read the DEM to create a grid and topography field</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-vegetation-grid">Create vegetation grid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configure-boundaries">Configure boundaries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generate-variable-rougness-as-field-in-grid">Generate variable rougness as field in grid</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#instantiate-a-tidalflowcalculator-component">Instantiate a TidalFlowCalculator component</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#assign-critical-shear-stress">Assign critical shear stress</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-grids">Create grids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#set-mud-erodability">Set mud erodability</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#run-a-single-erosion-step">Run a single erosion step</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#save-original-bathy-topo-maps">Save original bathy &amp; topo maps</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#run-erosion-over-timesteps">Run erosion over timesteps</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#plot-topographic-elevation">Plot topographic elevation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plot-final-water-depths">Plot final water depths</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#questions-to-think-about">Questions to think about</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HomogeneousField2D/HomogeneousField2D.html">Tides on a simple 2D field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RandomField2D/RandomField2D.html">Tides on a randomly vegetated field</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../apiref/index.html">API Reference</a></li>
 </ul>
 
@@ -133,6 +166,8 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
         
       <li>Sediment Erosion</li>
     
@@ -407,6 +442,15 @@ landscape? What code would need to be added?</p></li>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../HomogeneousField2D/HomogeneousField2D.html" class="btn btn-neutral float-right" title="Tides on a simple 2D field" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
