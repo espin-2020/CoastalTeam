@@ -8,7 +8,7 @@ The CoastalTeam worked with the tidal flow calculator (available `here <https://
 
 The tidal flow calculator is based on the work of Mariotti and Murshid (2018) [1]_ and has been partially integrated into `Landlab <http://landlab.github.io/>`_. In this project, our group had the following 2 objects:
 
-1. Add sediment erosion and sediment transport capabilities to the `Landlab <http://landlab.github.io/>`_ tidal flow calculator.
+1. Add sediment erosion capabilities to the `Landlab <http://landlab.github.io/>`_ tidal flow calculator.
 
 
 2. Couple with a lagrangian particle router (`dorado <https://passah2o.github.io/dorado/>`_).
