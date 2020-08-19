@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tidal_erosion_calculator &mdash; ESPIn2020 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> ESPIn2020
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../background/index.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apiref/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESPIn2020</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>tidal_erosion_calculator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tidal_erosion_calculator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Total sediment erosion (assumes limitless supply)</span>
+<span class="sd">Based on totalsedimenterosionmudsine.m by Giulio Mariotti </span>
+<span class="sd">Includes some code based on G. Tucker tidal_flow_calculator.py in landlab component</span>
+<span class="sd">Does not incorporate averaging over multiple tidal cycles or linear increase in critical shear stress with depth</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">landlab</span> <span class="kn">import</span> <span class="n">RasterModelGrid</span><span class="p">,</span> <span class="n">imshow_grid</span>
+<span class="kn">from</span> <span class="nn">landlab.components</span> <span class="kn">import</span> <span class="n">TidalFlowCalculator</span>
+<span class="kn">from</span> <span class="nn">landlab.io</span> <span class="kn">import</span> <span class="n">read_esri_ascii</span>
+<span class="kn">from</span> <span class="nn">landlab.grid.mappers</span> <span class="kn">import</span> <span class="n">map_max_of_link_nodes_to_link</span><span class="p">,</span> <span class="n">map_node_to_cell</span><span class="p">,</span> <span class="n">map_link_vector_components_to_node</span><span class="p">,</span> <span class="n">map_max_of_node_links_to_node</span>
+
+
+<div class="viewcode-block" id="map_velocity_components_to_nodes"><a class="viewcode-back" href="../apiref/erosion.html#tidal_erosion_calculator.map_velocity_components_to_nodes">[docs]</a><span class="k">def</span> <span class="nf">map_velocity_components_to_nodes</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Map the velocity components from the links to the nodes, and return the node arrays.&quot;&quot;&quot;</span>
+    <span class="n">ebb_vel_x</span><span class="p">,</span> <span class="n">ebb_vel_y</span> <span class="o">=</span> <span class="n">map_link_vector_components_to_node</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_link</span><span class="p">[</span><span class="s1">&#39;ebb_tide_flow__velocity&#39;</span><span class="p">])</span>
+    <span class="n">flood_vel_x</span> <span class="o">=</span> <span class="o">-</span><span class="n">ebb_vel_x</span>
+    <span class="n">flood_vel_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">ebb_vel_y</span>
+    <span class="n">ebb_vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ebb_vel_x</span><span class="o">*</span><span class="n">ebb_vel_x</span> <span class="o">+</span> <span class="n">ebb_vel_y</span><span class="o">*</span><span class="n">ebb_vel_y</span><span class="p">)</span>
+    <span class="n">flood_vel</span> <span class="o">=</span> <span class="o">-</span><span class="n">ebb_vel</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">ebb_vel_x</span><span class="p">,</span> <span class="n">ebb_vel_y</span><span class="p">,</span> <span class="n">flood_vel_x</span><span class="p">,</span> <span class="n">flood_vel_y</span><span class="p">,</span> <span class="n">ebb_vel</span><span class="p">,</span> <span class="n">flood_vel</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">plot_tidal_flow</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="p">(</span><span class="n">ebb_x</span><span class="p">,</span> <span class="n">ebb_y</span><span class="p">,</span> <span class="n">flood_x</span><span class="p">,</span> <span class="n">flood_y</span><span class="p">,</span> <span class="n">ebb</span><span class="p">,</span> <span class="n">flood</span><span class="p">)</span> <span class="o">=</span> <span class="n">map_velocity_components_to_nodes</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+    <span class="c1"># depth</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">imshow_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;mean_water__depth&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlGnBu&#39;</span><span class="p">,</span> <span class="n">color_for_closed</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Water depth (m)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+
+    <span class="c1"># down-sample for legible quiver plots if needed</span>
+    <span class="k">if</span> <span class="n">resample</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">xr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x_of_node</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_rows</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_columns</span><span class="p">))[::</span><span class="n">resample</span><span class="p">,</span> <span class="p">::</span><span class="n">resample</span><span class="p">]</span>
+        <span class="n">yr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y_of_node</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_rows</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_columns</span><span class="p">))[::</span><span class="n">resample</span><span class="p">,</span> <span class="p">::</span><span class="n">resample</span><span class="p">]</span>
+        <span class="n">ebb_xr</span> <span class="o">=</span> <span class="n">ebb_x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_rows</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_columns</span><span class="p">))[::</span><span class="n">resample</span><span class="p">,</span> <span class="p">::</span><span class="n">resample</span><span class="p">]</span>
+        <span class="n">ebb_yr</span> <span class="o">=</span> <span class="n">ebb_y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_rows</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_columns</span><span class="p">))[::</span><span class="n">resample</span><span class="p">,</span> <span class="p">::</span><span class="n">resample</span><span class="p">]</span>
+        <span class="n">fld_xr</span> <span class="o">=</span> <span class="n">flood_x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_rows</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_columns</span><span class="p">))[::</span><span class="n">resample</span><span class="p">,</span> <span class="p">::</span><span class="n">resample</span><span class="p">]</span>
+        <span class="n">fld_yr</span> <span class="o">=</span> <span class="n">flood_y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_rows</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">number_of_node_columns</span><span class="p">))[::</span><span class="n">resample</span><span class="p">,</span> <span class="p">::</span><span class="n">resample</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x_of_node</span>
+        <span class="n">yr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y_of_node</span>
+        <span class="n">ebb_xr</span> <span class="o">=</span> <span class="n">ebb_x</span>
+        <span class="n">ebb_yr</span> <span class="o">=</span> <span class="n">ebb_y</span>
+        <span class="n">fld_xr</span> <span class="o">=</span> <span class="n">flood_x</span>
+        <span class="n">fld_yr</span> <span class="o">=</span> <span class="n">flood_y</span>
+        
+    <span class="c1"># ebb tide</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">imshow_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;topographic__elevation&#39;</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">yr</span><span class="p">,</span> <span class="n">ebb_xr</span><span class="p">,</span> <span class="n">ebb_yr</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ebb Tide&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+
+    <span class="n">ebb_vel_magnitude</span> <span class="o">=</span> <span class="n">ebb</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">imshow_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">ebb_vel_magnitude</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;magma&#39;</span><span class="p">,</span> <span class="n">color_for_closed</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ebb Tide Velocity Magnitude (m/s)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+
+    <span class="c1"># flood tide</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">imshow_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;topographic__elevation&#39;</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span> <span class="n">yr</span><span class="p">,</span> <span class="n">fld_xr</span><span class="p">,</span> <span class="n">fld_yr</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Flood Tide&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">flood_vel_magnitude</span> <span class="o">=</span> <span class="n">flood</span>
+    <span class="n">imshow_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">flood_vel_magnitude</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;magma&#39;</span><span class="p">,</span> <span class="n">color_for_closed</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Flood Tide Velocity Magnitude (m/s)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Distance (m)&#39;</span><span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">var1</span><span class="p">,</span><span class="n">var2</span><span class="p">):</span> <span class="c1">#takes a grid, plus the variable you want to map to cell, and the string name</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_node_to_cell</span><span class="p">(</span><span class="n">var1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">var2</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="s1">&#39;cell&#39;</span><span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">map_link2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">var1</span><span class="p">,</span><span class="n">var2</span><span class="p">):</span> <span class="c1">#takes a grid, plus the variable you want to map to cell, and the string name</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_max_of_node_links_to_node</span><span class="p">(</span><span class="n">var1</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_node_to_cell</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">var2</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">at</span><span class="o">=</span><span class="s1">&#39;cell&#39;</span><span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">populateGrids</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">tfc</span><span class="p">,</span> <span class="n">tau_cr</span><span class="p">,</span> <span class="n">tau_crv</span><span class="p">,</span> <span class="n">veg</span><span class="p">):</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">tfc</span><span class="o">.</span><span class="n">calc_tidal_inundation_rate</span><span class="p">()</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;tidal_innundation_rate&#39;</span><span class="p">,</span><span class="n">rate</span><span class="p">,</span><span class="n">at</span> <span class="o">=</span> <span class="s1">&#39;node&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">rate</span><span class="p">,</span><span class="s1">&#39;tidal_innundation_rate_cell&#39;</span><span class="p">)</span>
+
+    <span class="n">tfc</span><span class="o">.</span><span class="n">_calc_effective_water_depth</span><span class="p">()</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;effective_water_depth&#39;</span><span class="p">,</span><span class="n">tfc</span><span class="o">.</span><span class="n">_water_depth</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">tfc</span><span class="o">.</span><span class="n">_water_depth</span><span class="p">,</span><span class="s1">&#39;effective_water_depth_cell&#39;</span><span class="p">)</span>
+    
+    <span class="n">tfc</span><span class="o">.</span><span class="n">run_one_step</span><span class="p">()</span>
+
+    <span class="n">topo</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;topographic__elevation&#39;</span><span class="p">]</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">topo</span><span class="p">,</span><span class="s1">&#39;topographic_elevation_cell&#39;</span><span class="p">)</span>
+    
+    <span class="n">msl</span> <span class="o">=</span> <span class="n">tfc</span><span class="o">.</span><span class="n">_mean_sea_level</span>
+    <span class="n">dHW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">topo</span><span class="o">+</span><span class="n">msl</span><span class="o">+</span><span class="n">tfc</span><span class="o">.</span><span class="n">_tidal_half_range</span><span class="p">)</span>
+    <span class="n">dHW</span><span class="p">[</span><span class="n">topo</span><span class="o">==</span><span class="mi">999</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">ftide</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">10</span><span class="o">^-</span><span class="mi">3</span><span class="p">,</span> <span class="n">dHW</span><span class="o">/</span><span class="n">tfc</span><span class="o">.</span><span class="n">_tidal_range</span><span class="p">))</span>
+    <span class="c1">#ftide[topo==999] = 999</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;hydroperiod&#39;</span><span class="p">,</span><span class="n">ftide</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;water_depth_at_MHW&#39;</span><span class="p">,</span><span class="n">dHW</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">ftide</span><span class="p">,</span><span class="s1">&#39;hydroperiod_cell&#39;</span><span class="p">)</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">dHW</span><span class="p">,</span><span class="s1">&#39;water_depth_at_MHW_cell&#39;</span><span class="p">)</span>
+    
+    <span class="n">lev_an</span> <span class="o">=</span> <span class="o">-</span><span class="n">topo</span><span class="o">-</span><span class="n">msl</span> <span class="c1">#water depth with respect to MSL</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;lev_at_node&#39;</span><span class="p">,</span><span class="n">lev_an</span><span class="p">,</span><span class="n">at</span> <span class="o">=</span> <span class="s1">&#39;node&#39;</span><span class="p">)</span>
+    <span class="n">lev_atlink</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_max_of_link_nodes_to_link</span><span class="p">(</span><span class="s1">&#39;lev_at_node&#39;</span><span class="p">)</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">lev_an</span><span class="p">,</span><span class="s1">&#39;lev_at_cell&#39;</span><span class="p">)</span>
+
+    <span class="n">taucr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_zeros</span><span class="p">(</span><span class="s1">&#39;tau_cr&#39;</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;link&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">tau_cr</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_link</span><span class="p">[</span><span class="s1">&#39;veg_atlink&#39;</span><span class="p">]</span> 
+    <span class="n">taucr</span><span class="p">[</span><span class="n">v</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tau_crv</span>
+    <span class="n">taucr_node</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_max_of_node_links_to_node</span><span class="p">(</span><span class="n">taucr</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;tau_cr_node&#39;</span><span class="p">,</span><span class="n">taucr_node</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span>
+    <span class="n">map_link2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">taucr</span><span class="p">,</span><span class="s1">&#39;tau_cr_cell&#39;</span><span class="p">)</span>
+    
+    <span class="n">ebb</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_link</span><span class="p">[</span><span class="s1">&#39;ebb_tide_flow__velocity&#39;</span><span class="p">]</span>
+    <span class="n">ebb_node</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_max_of_node_links_to_node</span><span class="p">(</span><span class="n">ebb</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;ebb_tide_flow__velocity_node&#39;</span><span class="p">,</span><span class="n">ebb_node</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;flood_tide_flow__velocity_node&#39;</span><span class="p">,</span><span class="o">-</span><span class="n">ebb_node</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">ebb</span><span class="p">,</span><span class="s1">&#39;ebb_tide_flow__velocity_cell&#39;</span><span class="p">)</span>
+    <span class="n">map_node2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="o">-</span><span class="n">ebb</span><span class="p">,</span><span class="s1">&#39;flood_tide_flow__velocity_cell&#39;</span><span class="p">)</span>
+    
+    <span class="n">rough</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_link</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span class="p">]</span>
+    <span class="n">rough_node</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_max_of_node_links_to_node</span><span class="p">(</span><span class="n">rough</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;roughness_node&#39;</span><span class="p">,</span><span class="n">rough_node</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span>
+    <span class="n">map_link2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">rough</span><span class="p">,</span><span class="s1">&#39;roughness_cell&#39;</span><span class="p">)</span>
+    
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;water_depth_at_link&#39;</span><span class="p">,</span><span class="n">tfc</span><span class="o">.</span><span class="n">_water_depth_at_links</span><span class="p">,</span><span class="n">at</span> <span class="o">=</span> <span class="s1">&#39;link&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+    <span class="n">wd</span> <span class="o">=</span> <span class="n">tfc</span><span class="o">.</span><span class="n">_water_depth_at_links</span>
+    <span class="n">wd_node</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">map_max_of_node_links_to_node</span><span class="p">(</span><span class="n">wd</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;water_depth_at_node&#39;</span><span class="p">,</span><span class="n">wd_node</span><span class="p">,</span><span class="n">at</span><span class="o">=</span><span class="s1">&#39;node&#39;</span><span class="p">)</span>
+    <span class="n">map_link2cell_addGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">tfc</span><span class="o">.</span><span class="n">_water_depth_at_links</span><span class="p">,</span><span class="s1">&#39;water_depth_at_cell&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">totalsedimenterosion_mudsine</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">mud_erodability</span><span class="p">):</span>
+
+    <span class="n">fupeak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+    <span class="c1">#total sed erosion for loop</span>
+    <span class="n">ntdcy</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1">#number of tidal cycles</span>
+    <span class="n">taucr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;tau_cr_node&#39;</span><span class="p">]</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">taucr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    
+    <span class="c1"># get rid of for loop</span>
+    <span class="c1">#for i in range(ntdcy):</span>
+    <span class="n">utide</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;flood_tide_flow__velocity_node&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">fupeak</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#intra-tidal velocity</span>
+    <span class="n">tauC</span> <span class="o">=</span> <span class="mi">1025</span><span class="o">*</span><span class="mf">9.81</span><span class="o">*</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;roughness_node&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">utide</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_node</span><span class="p">[</span><span class="s1">&#39;water_depth_at_node&#39;</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">E</span> <span class="o">+=</span> <span class="n">mud_erodability</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">tauC</span><span class="o">/</span><span class="n">taucr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">E</span>
+    
+<span class="k">def</span> <span class="nf">totalsedimenterosion_mudsine_link</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">mud_erodability</span><span class="p">):</span>
+
+    <span class="n">fupeak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+    <span class="c1">#total sed erosion for loop</span>
+    <span class="n">ntdcy</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1">#number of tidal cycles</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_zeros</span><span class="p">(</span><span class="s1">&#39;Erosion&#39;</span><span class="p">,</span><span class="n">at</span> <span class="o">=</span> <span class="s1">&#39;cell&#39;</span><span class="p">)</span>
+    <span class="n">taucr</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_cell</span><span class="p">[</span><span class="s1">&#39;tau_cr_cell&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># get rid of for loop</span>
+    <span class="c1">#for i in range(ntdcy):</span>
+    <span class="n">utide</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_cell</span><span class="p">[</span><span class="s1">&#39;flood_tide_flow__velocity_cell&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">fupeak</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#intra-tidal velocity</span>
+    <span class="n">tauC</span> <span class="o">=</span> <span class="mi">1025</span><span class="o">*</span><span class="mf">9.81</span><span class="o">*</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_cell</span><span class="p">[</span><span class="s1">&#39;roughness_cell&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">utide</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_cell</span><span class="p">[</span><span class="s1">&#39;water_depth_at_cell&#39;</span><span class="p">]</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">E</span> <span class="o">+=</span> <span class="n">mud_erodability</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">tauC</span><span class="o">/</span><span class="n">taucr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#print(max(E))</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, CoastalTeam
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

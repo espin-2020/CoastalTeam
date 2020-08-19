@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; ESPIn2020 1.0.0 documentation</title>
+  <title>Functions for Erosion &mdash; ESPIn2020 1.0.0 documentation</title>
   
 
   
@@ -35,7 +35,9 @@
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Functions for Passive Particles" href="particles.html" />
+    <link rel="prev" title="API Reference" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,10 +86,14 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../background/index.html">Background</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../apiref/index.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Functions for Erosion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particles.html">Functions for Passive Particles</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -134,10 +140,16 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Overview: module code</li>
+          <li><a href="index.html">API Reference</a> &raquo;</li>
+        
+      <li>Functions for Erosion</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/apiref/erosion.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -149,17 +161,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="passive_particles/map_fun.html">passive_particles.map_fun</a></li>
-<li><a href="passive_particles/particletransport.html">passive_particles.particletransport</a></li>
-<li><a href="passive_particles/plot_fun.html">passive_particles.plot_fun</a></li>
-<li><a href="tidal_erosion_calculator.html">tidal_erosion_calculator</a></li>
-</ul>
+  <div class="section" id="module-tidal_erosion_calculator">
+<span id="functions-for-erosion"></span><span id="erosion"></span><h1>Functions for Erosion<a class="headerlink" href="#module-tidal_erosion_calculator" title="Permalink to this headline">¶</a></h1>
+<p>Total sediment erosion (assumes limitless supply)
+Based on totalsedimenterosionmudsine.m by Giulio Mariotti 
+Includes some code based on G. Tucker tidal_flow_calculator.py in landlab component
+Does not incorporate averaging over multiple tidal cycles or linear increase in critical shear stress with depth</p>
+<dl class="function">
+<dt id="tidal_erosion_calculator.map_velocity_components_to_nodes">
+<code class="descclassname">tidal_erosion_calculator.</code><code class="descname">map_velocity_components_to_nodes</code><span class="sig-paren">(</span><em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tidal_erosion_calculator.html#map_velocity_components_to_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tidal_erosion_calculator.map_velocity_components_to_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map the velocity components from the links to the nodes, and return the node arrays.</p>
+</dd></dl>
+
+</div>
+
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="particles.html" class="btn btn-neutral float-right" title="Functions for Passive Particles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
