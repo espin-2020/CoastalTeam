@@ -162,14 +162,24 @@
     <span class="sd">&quot;&quot;&quot;Initialize the particles.</span>
 
 <span class="sd">    Inputs :</span>
-<span class="sd">        init_x - List of starting x locations for the particles</span>
-<span class="sd">        init_y - List of starting y locations for the particles</span>
-<span class="sd">        Np_tracer - Number of particles to route</span>
-<span class="sd">        grid_spacing - Size of the raster grid cells</span>
-<span class="sd">        gridded_vals - gridded_vals object from map_fun.py</span>
+<span class="sd">        init_x : `list`</span>
+<span class="sd">            List of starting x locations for the particles</span>
+
+<span class="sd">        init_y : `list`</span>
+<span class="sd">            List of starting y locations for the particles</span>
+
+<span class="sd">        Np_tracer : `int`</span>
+<span class="sd">            Number of particles to route</span>
+
+<span class="sd">        grid_spacing : `int`</span>
+<span class="sd">            Size of the raster grid cells</span>
+
+<span class="sd">        gridded_vals : `obj`</span>
+<span class="sd">            gridded_vals object from map_fun.py</span>
 
 <span class="sd">    Outputs :</span>
-<span class="sd">        params - an initialized params class</span>
+<span class="sd">        params : `obj`</span>
+<span class="sd">            an initialized params class</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># create class</span>
@@ -196,13 +206,21 @@
     <span class="sd">&quot;&quot;&quot;Route the particles in tides.</span>
 
 <span class="sd">    Inputs :</span>
-<span class="sd">        params - params output from init_particles()</span>
-<span class="sd">        tide_period - tidal period in seconds</span>
-<span class="sd">        n_tide_periods - number of tidal periods to iterate particles over</span>
-<span class="sd">        plot_grid - Optional, grid on which to plot the particles (e.g. depth)</span>
+<span class="sd">        params : `obj`</span>
+<span class="sd">            params output from init_particles()</span>
+
+<span class="sd">        tide_period : `int`</span>
+<span class="sd">            tidal period in seconds</span>
+
+<span class="sd">        n_tide_periods : &#39;int&#39;</span>
+<span class="sd">            number of tidal periods to iterate particles over</span>
+
+<span class="sd">        plot_grid : `numpy.ndarray` (Optional)</span>
+<span class="sd">            grid on which to plot the particles (e.g. depth)</span>
 
 <span class="sd">    Returns :</span>
-<span class="sd">        walk_data - history of particle locations and travel times</span>
+<span class="sd">        walk_data : `list`</span>
+<span class="sd">            history of particle locations and travel times</span>
 
 <span class="sd">        Also saves image of particle locations to disk for each flood/ebb tide.</span>
 

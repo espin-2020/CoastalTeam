@@ -171,8 +171,11 @@
 <dt id="passive_particles.map_fun.gridded_vars.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/map_fun.html#gridded_vars.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.map_fun.gridded_vars.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the class.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>grid - A landlab grid object.</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>grid<span class="classifier"><cite>obj</cite></span></dt><dd><p>A landlab grid object.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -189,13 +192,22 @@
 <dt id="passive_particles.map_fun.map_velocity_components_to_nodes">
 <code class="descclassname">passive_particles.map_fun.</code><code class="descname">map_velocity_components_to_nodes</code><span class="sig-paren">(</span><em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/map_fun.html#map_velocity_components_to_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.map_fun.map_velocity_components_to_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map the velocity components from the links to the nodes.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>grid - A landlab grid object</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>grid<span class="classifier"><cite>obj</cite></span></dt><dd><p>A landlab grid object</p>
 </dd>
-<dt>Returns :</dt><dd><p>ebb_vel_x - ebb x component of flow velocity
-ebb_vel_y - ebb y component of flow velocity
-flood_vel_x - flood x component of flow velocity
-flood_vel_y - flood y component of flow velocity</p>
+</dl>
+</dd>
+<dt>Returns :</dt><dd><dl>
+<dt>ebb_vel_x<span class="classifier"><cite>numpy.ndarray</cite></span></dt><dd><p>ebb x component of flow velocity</p>
+</dd>
+<dt>ebb_vel_y<span class="classifier"><cite>numpy.ndarray</cite></span></dt><dd><p>ebb y component of flow velocity</p>
+</dd>
+<dt>flood_vel_x<span class="classifier"><cite>numpy.ndarray</cite></span></dt><dd><p>flood x component of flow velocity</p>
+</dd>
+<dt>flood_vel_y<span class="classifier"><cite>numpy.ndarray</cite></span></dt><dd><p>flood y component of flow velocity</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -205,8 +217,11 @@ flood_vel_y - flood y component of flow velocity</p>
 <dt id="passive_particles.plot_fun.group_plot">
 <code class="descclassname">passive_particles.plot_fun.</code><code class="descname">group_plot</code><span class="sig-paren">(</span><em>gridded_vars</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/plot_fun.html#group_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.plot_fun.group_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set of plots of the gridded variables.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>gridded_vars - A gridded_vars object from map_fun.py</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>gridded_vars<span class="classifier"><cite>obj</cite></span></dt><dd><p>A gridded_vars object from map_fun.py</p>
+</dd>
+</dl>
 </dd>
 <dt>Returns :</dt><dd><p>Draws a figure that can be rendered with plt.show()</p>
 </dd>
@@ -217,9 +232,13 @@ flood_vel_y - flood y component of flow velocity</p>
 <dt id="passive_particles.plot_fun.plot_depth">
 <code class="descclassname">passive_particles.plot_fun.</code><code class="descname">plot_depth</code><span class="sig-paren">(</span><em>grid</em>, <em>resample=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/plot_fun.html#plot_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.plot_fun.plot_depth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot of water depths.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>grid - A landlab grid object
-resample - Downsampling value</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>grid<span class="classifier"><cite>obj</cite></span></dt><dd><p>A landlab grid object</p>
+</dd>
+<dt>resample<span class="classifier"><cite>int</cite></span></dt><dd><p>Downsampling value</p>
+</dd>
+</dl>
 </dd>
 <dt>Returns :</dt><dd><p>Draws a figure that can be rendered with plt.show()</p>
 </dd>
@@ -230,9 +249,13 @@ resample - Downsampling value</p>
 <dt id="passive_particles.plot_fun.plot_ebb_magnitudes">
 <code class="descclassname">passive_particles.plot_fun.</code><code class="descname">plot_ebb_magnitudes</code><span class="sig-paren">(</span><em>grid</em>, <em>resample=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/plot_fun.html#plot_ebb_magnitudes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.plot_fun.plot_ebb_magnitudes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot of ebb velocities.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>grid - A landlab grid object
-resample - Downsampling value</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>grid <cite>obj</cite></dt><dd><p>A landlab grid object</p>
+</dd>
+<dt>resample<span class="classifier"><cite>int</cite></span></dt><dd><p>Downsampling value</p>
+</dd>
+</dl>
 </dd>
 <dt>Returns :</dt><dd><p>Draws a figure that can be rendered with plt.show()</p>
 </dd>
@@ -243,9 +266,13 @@ resample - Downsampling value</p>
 <dt id="passive_particles.plot_fun.plot_ebb_quiver">
 <code class="descclassname">passive_particles.plot_fun.</code><code class="descname">plot_ebb_quiver</code><span class="sig-paren">(</span><em>grid</em>, <em>resample=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/plot_fun.html#plot_ebb_quiver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.plot_fun.plot_ebb_quiver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quiver plot of ebb velocities.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>grid - A landlab grid object
-resample - Downsampling value</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>grid<span class="classifier"><cite>obj</cite></span></dt><dd><p>A landlab grid object</p>
+</dd>
+<dt>resample <cite>int</cite></dt><dd><p>Downsampling value</p>
+</dd>
+</dl>
 </dd>
 <dt>Returns :</dt><dd><p>Draws a figure that can be rendered with plt.show()</p>
 </dd>
@@ -256,9 +283,13 @@ resample - Downsampling value</p>
 <dt id="passive_particles.plot_fun.plot_flood_magnitudes">
 <code class="descclassname">passive_particles.plot_fun.</code><code class="descname">plot_flood_magnitudes</code><span class="sig-paren">(</span><em>grid</em>, <em>resample=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/plot_fun.html#plot_flood_magnitudes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.plot_fun.plot_flood_magnitudes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot of flood velocities.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>grid - A landlab grid object
-resample - Downsampling value</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>grid<span class="classifier"><cite>obj</cite></span></dt><dd><p>A landlab grid object</p>
+</dd>
+<dt>resample<span class="classifier"><cite>int</cite></span></dt><dd><p>Downsampling value</p>
+</dd>
+</dl>
 </dd>
 <dt>Returns :</dt><dd><p>Draws a figure that can be rendered with plt.show()</p>
 </dd>
@@ -269,9 +300,13 @@ resample - Downsampling value</p>
 <dt id="passive_particles.plot_fun.plot_flood_quiver">
 <code class="descclassname">passive_particles.plot_fun.</code><code class="descname">plot_flood_quiver</code><span class="sig-paren">(</span><em>grid</em>, <em>resample=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/plot_fun.html#plot_flood_quiver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.plot_fun.plot_flood_quiver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quiver plot of flood velocities.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>grid - A landlab grid object
-resample - Downsampling value</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>grid<span class="classifier"><cite>obj</cite></span></dt><dd><p>A landlab grid object</p>
+</dd>
+<dt>resample <cite>int</cite></dt><dd><p>Downsampling value</p>
+</dd>
+</dl>
 </dd>
 <dt>Returns :</dt><dd><p>Draws a figure that can be rendered with plt.show()</p>
 </dd>
@@ -283,14 +318,24 @@ resample - Downsampling value</p>
 <dt id="passive_particles.particletransport.init_particles">
 <code class="descclassname">passive_particles.particletransport.</code><code class="descname">init_particles</code><span class="sig-paren">(</span><em>init_x</em>, <em>init_y</em>, <em>Np_tracer</em>, <em>grid_spacing</em>, <em>gridded_vals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/particletransport.html#init_particles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.particletransport.init_particles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the particles.</p>
-<dl class="simple">
-<dt>Inputs :</dt><dd><p>init_x - List of starting x locations for the particles
-init_y - List of starting y locations for the particles
-Np_tracer - Number of particles to route
-grid_spacing - Size of the raster grid cells
-gridded_vals - gridded_vals object from map_fun.py</p>
+<dl>
+<dt>Inputs :</dt><dd><dl>
+<dt>init_x<span class="classifier"><cite>list</cite></span></dt><dd><p>List of starting x locations for the particles</p>
 </dd>
-<dt>Outputs :</dt><dd><p>params - an initialized params class</p>
+<dt>init_y<span class="classifier"><cite>list</cite></span></dt><dd><p>List of starting y locations for the particles</p>
+</dd>
+<dt>Np_tracer<span class="classifier"><cite>int</cite></span></dt><dd><p>Number of particles to route</p>
+</dd>
+<dt>grid_spacing<span class="classifier"><cite>int</cite></span></dt><dd><p>Size of the raster grid cells</p>
+</dd>
+<dt>gridded_vals<span class="classifier"><cite>obj</cite></span></dt><dd><p>gridded_vals object from map_fun.py</p>
+</dd>
+</dl>
+</dd>
+<dt>Outputs :</dt><dd><dl>
+<dt>params<span class="classifier"><cite>obj</cite></span></dt><dd><p>an initialized params class</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -300,12 +345,21 @@ gridded_vals - gridded_vals object from map_fun.py</p>
 <code class="descclassname">passive_particles.particletransport.</code><code class="descname">tidal_particles</code><span class="sig-paren">(</span><em>params</em>, <em>tide_period</em>, <em>n_tide_periods</em>, <em>plot_grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/passive_particles/particletransport.html#tidal_particles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#passive_particles.particletransport.tidal_particles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Route the particles in tides.</p>
 <dl>
-<dt>Inputs :</dt><dd><p>params - params output from init_particles()
-tide_period - tidal period in seconds
-n_tide_periods - number of tidal periods to iterate particles over
-plot_grid - Optional, grid on which to plot the particles (e.g. depth)</p>
+<dt>Inputs :</dt><dd><dl>
+<dt>params<span class="classifier"><cite>obj</cite></span></dt><dd><p>params output from init_particles()</p>
 </dd>
-<dt>Returns :</dt><dd><p>walk_data - history of particle locations and travel times</p>
+<dt>tide_period<span class="classifier"><cite>int</cite></span></dt><dd><p>tidal period in seconds</p>
+</dd>
+<dt>n_tide_periods<span class="classifier">‘int’</span></dt><dd><p>number of tidal periods to iterate particles over</p>
+</dd>
+<dt>plot_grid<span class="classifier"><cite>numpy.ndarray</cite> (Optional)</span></dt><dd><p>grid on which to plot the particles (e.g. depth)</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns :</dt><dd><dl>
+<dt>walk_data<span class="classifier"><cite>list</cite></span></dt><dd><p>history of particle locations and travel times</p>
+</dd>
+</dl>
 <p>Also saves image of particle locations to disk for each flood/ebb tide.</p>
 </dd>
 </dl>

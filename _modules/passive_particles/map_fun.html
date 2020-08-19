@@ -161,13 +161,21 @@
     <span class="sd">&quot;&quot;&quot;Map the velocity components from the links to the nodes.</span>
 
 <span class="sd">    Inputs :</span>
-<span class="sd">        grid - A landlab grid object</span>
+<span class="sd">        grid : `obj`</span>
+<span class="sd">            A landlab grid object</span>
 
 <span class="sd">    Returns :</span>
-<span class="sd">        ebb_vel_x - ebb x component of flow velocity</span>
-<span class="sd">        ebb_vel_y - ebb y component of flow velocity</span>
-<span class="sd">        flood_vel_x - flood x component of flow velocity</span>
-<span class="sd">        flood_vel_y - flood y component of flow velocity</span>
+<span class="sd">        ebb_vel_x : `numpy.ndarray`</span>
+<span class="sd">            ebb x component of flow velocity</span>
+
+<span class="sd">        ebb_vel_y : `numpy.ndarray`</span>
+<span class="sd">            ebb y component of flow velocity</span>
+
+<span class="sd">        flood_vel_x : `numpy.ndarray`</span>
+<span class="sd">            flood x component of flow velocity</span>
+
+<span class="sd">        flood_vel_y : `numpy.ndarray`</span>
+<span class="sd">            flood y component of flow velocity</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ebb_vel_x</span><span class="p">,</span> <span class="n">ebb_vel_y</span> <span class="o">=</span> <span class="n">mln</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">at_link</span><span class="p">[</span><span class="s1">&#39;ebb_tide_flow__velocity&#39;</span><span class="p">])</span>
@@ -183,7 +191,8 @@
         <span class="sd">&quot;&quot;&quot;Initialize the class.</span>
 
 <span class="sd">        Inputs :</span>
-<span class="sd">            grid - A landlab grid object.</span>
+<span class="sd">            grid : `obj`</span>
+<span class="sd">                A landlab grid object.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># get velocity components</span>
