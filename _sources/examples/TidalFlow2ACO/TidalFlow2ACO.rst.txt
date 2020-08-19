@@ -1,4 +1,4 @@
-Sediment erosion and Transport from
+Sediment erosion and Transport 
 ===================================
 
 In this notebook we implement the erosion and sediment transport
