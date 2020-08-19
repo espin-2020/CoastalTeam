@@ -317,7 +317,7 @@ Plot final water depths
 
 
 Questions to think about
-========================
+------------------------
 
 1. Now you can see where there is high erosion occuring - why might this
    spot have erosion? What might change the pattern and location of
