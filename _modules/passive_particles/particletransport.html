@@ -183,7 +183,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># create class</span>
-    <span class="n">params</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">params</span><span class="p">()</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">modelParams</span><span class="p">()</span>
     <span class="c1"># populate with required parameters</span>
     <span class="n">params</span><span class="o">.</span><span class="n">seed_xloc</span> <span class="o">=</span> <span class="n">init_y</span>
     <span class="n">params</span><span class="o">.</span><span class="n">seed_yloc</span> <span class="o">=</span> <span class="n">init_x</span>
@@ -226,7 +226,11 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># define the particle</span>
-    <span class="n">particle</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">Particle</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">particle</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="c1"># generate a set of particles to route around</span>
+    <span class="n">particle</span><span class="o">.</span><span class="n">generate_particles</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">Np_tracer</span><span class="p">,</span>
+                                <span class="n">params</span><span class="o">.</span><span class="n">seed_xloc</span><span class="p">,</span>
+                                <span class="n">params</span><span class="o">.</span><span class="n">seed_yloc</span><span class="p">)</span>
     <span class="c1"># record each 1/2 tidal cycle so each ebb and flood</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_tide_periods</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -237,16 +241,18 @@
                 <span class="c1"># ebb tide</span>
                 <span class="n">params</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">ex</span>
                 <span class="n">params</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">ey</span>
-                <span class="n">particle</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">Particle</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-                <span class="n">walk_data</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">run_iteration</span><span class="p">(</span><span class="n">previous_walk_data</span><span class="o">=</span><span class="n">walk_data</span><span class="p">,</span>
-                                                   <span class="n">target_time</span><span class="o">=</span><span class="n">tide_period</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">particle</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="n">particle</span><span class="o">.</span><span class="n">generate_particles</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span>
+                                            <span class="n">previous_walk_data</span><span class="o">=</span><span class="n">walk_data</span><span class="p">)</span>
+                <span class="n">walk_data</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">run_iteration</span><span class="p">(</span><span class="n">target_time</span><span class="o">=</span><span class="n">tide_period</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># flood tide</span>
                 <span class="n">params</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">fx</span>
                 <span class="n">params</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">fy</span>
-                <span class="n">particle</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">Particle</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-                <span class="n">walk_data</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">run_iteration</span><span class="p">(</span><span class="n">previous_walk_data</span><span class="o">=</span><span class="n">walk_data</span><span class="p">,</span>
-                                                   <span class="n">target_time</span><span class="o">=</span><span class="n">tide_period</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">particle</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">Particles</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="n">particle</span><span class="o">.</span><span class="n">generate_particles</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span>
+                                            <span class="n">previous_walk_data</span><span class="o">=</span><span class="n">walk_data</span><span class="p">)</span>
+                <span class="n">walk_data</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">run_iteration</span><span class="p">(</span><span class="n">target_time</span><span class="o">=</span><span class="n">tide_period</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 
         <span class="c1"># plot and save particle locations</span>
         <span class="k">if</span> <span class="n">plot_grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
